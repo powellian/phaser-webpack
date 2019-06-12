@@ -103,6 +103,9 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
         if (this.jumpTimer) {
           this.jumpTimer.destroy();
         }
+      },
+      flip: () => {
+        this.setFlipX(!this.flipX);
       }
     }
 
@@ -111,6 +114,7 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
       isWalking: () => this.body.onFloor() && (this.inputs.left || this.inputs.right),
       isJumping: () => this.body.onFloor() && this.inputs.jump,
       isCrouching: () => this.body.onFloor() && this.inputs.down,
+      isFlipping: () => (this.inputs.left && !this.flipX) || (this.inputs.right && this.flipX),
       isOnFloor: () => this.body.onFloor()
     }
   }
@@ -145,6 +149,8 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
           this.actions.crouch();
         } else if (!this.check.isOnFloor()) {
           this.actions.fall();
+        } else if (this.check.isFlipping()) {
+          this.actions.flip();
         }
         break;
 
@@ -158,6 +164,8 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
           this.actions.fall();
         } else if (!this.check.isWalking()) {
           this.actions.stand();
+        } else if (this.check.isFlipping()) {
+          this.actions.flip();
         }
         break;
 
@@ -167,6 +175,8 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
 
         if (!this.check.isCrouching()) {
           this.actions.stand();
+        } else if (this.check.isFlipping()) {
+          this.actions.flip();
         }
         break;
 
@@ -177,6 +187,8 @@ export default class MarioSprite extends Phaser.GameObjects.Sprite {
 
         if (this.check.isOnFloor()) {
           this.actions.stand();
+        } else if (this.check.isFlipping()) {
+          this.actions.flip();
         }
         break;
     }
