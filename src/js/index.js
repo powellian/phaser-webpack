@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import MarioScene from './MarioScene';
+import '../sass/styles.scss';
 
 const config = {
   type: Phaser.AUTO,
